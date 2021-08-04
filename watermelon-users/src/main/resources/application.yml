@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: USERS
+  cloud:
+    nacos:
+      server-addr: 106.15.43.178:8848
+
+
