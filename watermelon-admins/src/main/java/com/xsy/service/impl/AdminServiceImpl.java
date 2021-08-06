@@ -1,11 +1,10 @@
 package com.xsy.service.impl;
-import com.xsy.entity.Admin;
 import com.xsy.dao.AdminDao;
+import com.xsy.entity.Admin;
 import com.xsy.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -76,5 +75,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean deleteById(Integer id) {
         return this.adminDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public Admin login(Admin admin) {
+        return adminDao.selectByUsername(admin.getUsername());
     }
 }

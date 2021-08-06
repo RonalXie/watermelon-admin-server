@@ -1,0 +1,44 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: GATEWAY
+  cloud:
+    nacos:
+      server-addr: 106.15.43.178:8848
+    gateway:
+      routes: #配置路由规则
+
+          #管理员网关
+        - id: admins-router
+          uri: lb://ADMINS  #转发到注册中心ADMINS服务
+          predicates:
+            - Path=/admins/**
+          filters:
+            - StripPrefix=1 #通过过滤器去掉一级前缀
+
+          #分类网关
+        - id: category-router
+          uri: lb://CATEGORY  #转发到注册中心ADMINS服务
+          predicates:
+            - Path=/category/**
+          filters:
+            - StripPrefix=1 #通过过滤器去掉一级前缀
+
+          #用户网关
+        - id: users-router
+          uri: lb://USERS  #转发到注册中心ADMINS服务
+          predicates:
+            - Path=/users/**
+          filters:
+            - StripPrefix=1 #通过过滤器去掉一级前缀
+
+          #视频网关
+        - id: videos-router
+          uri: lb://VIDEOS  #转发到注册中心ADMINS服务
+          predicates:
+            - Path=/videos/**
+          filters:
+            - StripPrefix=1 #通过过滤器去掉一级前缀
+
+

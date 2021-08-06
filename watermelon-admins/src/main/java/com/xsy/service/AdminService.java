@@ -1,6 +1,7 @@
 package com.xsy.service;
 
 import com.xsy.entity.Admin;
+
 import java.util.List;
 
 /**
@@ -52,4 +53,5 @@ public interface AdminService {
      */
     boolean deleteById(Integer id);
 
+    Admin login(Admin admin);
 }

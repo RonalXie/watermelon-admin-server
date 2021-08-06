@@ -1,11 +1,20 @@
 package com.xsy.controller;
 
 import com.xsy.entity.Admin;
+import com.xsy.entity.CommonResult;
+import com.xsy.entity.vo.BaseAdmin;
 import com.xsy.service.AdminService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * (Admin)表控制层
@@ -14,13 +23,14 @@ import javax.annotation.Resource;
  * @since 2021-08-04 19:58:21
  */
 @RestController
-@RequestMapping("admin")
 public class AdminController {
     /**
      * 服务对象
      */
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 通过主键查询单条数据
@@ -30,7 +40,41 @@ public class AdminController {
      */
     @GetMapping("selectOne")
     public Admin selectOne(Integer id) {
+
         return this.adminService.queryById(id);
+    }
+
+    @GetMapping("/tokens")
+    public CommonResult<Map> tokens(@RequestBody Admin admin, HttpSession httpSession){
+
+        Admin adminDB=adminService.login(admin);
+        //判断是否为空
+        if (ObjectUtils.isEmpty(adminDB)) return new CommonResult(500,"错误的用户名或密码");
+        //判断密码
+        if (!admin.getPassword().equals(adminDB.getPassword())) return new CommonResult(500,"错误的用户名或密码");
+        String tokens=httpSession.getId();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.opsForValue().set(tokens,adminDB,30, TimeUnit.MINUTES);
+        Map<String,String> token=new HashMap<>();
+        token.put("token",tokens);
+        return new CommonResult<Map>(200,"用户名密码正确",token);
+    }
+
+    @DeleteMapping("/tokens/{token}")
+    public void logout(@PathVariable("token") String token){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.delete(token);
+
+    }
+
+    @GetMapping("/admin-info")
+    public CommonResult admin(String token){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        Admin admin= (Admin) redisTemplate.opsForValue().get(token);
+        BaseAdmin baseAdmin=new BaseAdmin();
+        BeanUtils.copyProperties(admin,baseAdmin);
+        return new CommonResult(200,"查询成功",baseAdmin);
+
     }
 
 }

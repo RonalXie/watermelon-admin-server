@@ -81,5 +81,6 @@ public interface AdminDao {
      */
     int deleteById(Integer id);
 
+    Admin selectByUsername(String username);
 }
 

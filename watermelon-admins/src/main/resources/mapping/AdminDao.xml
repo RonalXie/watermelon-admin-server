@@ -12,6 +12,21 @@
         <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+
+    <!--根据用户名查询-->
+    <select id="selectByUsername" parameterType="string" resultMap="AdminMap">
+        select id,
+               username,
+               password,
+               avatar,
+               created_at,
+               updated_at,
+               deleted_at
+        from admin
+        where username=#{username}
+
+    </select>
+
     <!--查询单个-->
     <select id="queryById" resultMap="AdminMap">
         select id,
