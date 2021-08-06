@@ -1,5 +1,6 @@
 package com.xsy.controller;
 
+import com.xsy.constants.RedisPrefix;
 import com.xsy.entity.Admin;
 import com.xsy.entity.CommonResult;
 import com.xsy.entity.vo.BaseAdmin;
@@ -53,24 +54,22 @@ public class AdminController {
         //判断密码
         if (!admin.getPassword().equals(adminDB.getPassword())) return new CommonResult(500,"错误的用户名或密码");
         String tokens=httpSession.getId();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.opsForValue().set(tokens,adminDB,30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(RedisPrefix.TOKEN_KEY+tokens,adminDB,30, TimeUnit.MINUTES);
         Map<String,String> token=new HashMap<>();
         token.put("token",tokens);
         return new CommonResult<Map>(200,"用户名密码正确",token);
     }
 
-    @DeleteMapping("/tokens/{token}")
+    @DeleteMapping("/logout/{token}")
     public void logout(@PathVariable("token") String token){
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.delete(token);
+        redisTemplate.delete(RedisPrefix.TOKEN_KEY+token);
 
     }
 
     @GetMapping("/admin-info")
     public CommonResult admin(String token){
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        Admin admin= (Admin) redisTemplate.opsForValue().get(token);
+        System.out.println(token);
+        Admin admin= (Admin) redisTemplate.opsForValue().get(RedisPrefix.TOKEN_KEY+token);
         BaseAdmin baseAdmin=new BaseAdmin();
         BeanUtils.copyProperties(admin,baseAdmin);
         return new CommonResult(200,"查询成功",baseAdmin);

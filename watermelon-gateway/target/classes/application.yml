@@ -24,6 +24,7 @@ spring:
             - Path=/category/**
           filters:
             - StripPrefix=1 #通过过滤器去掉一级前缀
+            - Token=false
 
           #用户网关
         - id: users-router
@@ -42,3 +43,6 @@ spring:
             - StripPrefix=1 #通过过滤器去掉一级前缀
 
 
+  redis:
+    host: 106.15.43.178
+    port: 6379
