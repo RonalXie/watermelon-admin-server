@@ -24,16 +24,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
-     */
-    @GetMapping("selectOne")
-    public User selectOne(Integer id) {
-        return this.userService.queryById(id);
-    }
+
+
 
     @PostMapping("/users")
     public CommonResult<Map> users(Integer page,Integer pageSize,String name,String phone){

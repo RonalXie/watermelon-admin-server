@@ -2,7 +2,7 @@ server:
   port: 8888
 spring:
   application:
-    name: GATEWAY
+    name: ADMIN-GATEWAY
   cloud:
     nacos:
       server-addr: 106.15.43.178:8848
@@ -11,7 +11,7 @@ spring:
 
           #管理员网关
         - id: admins-router
-          uri: lb://ADMINS  #转发到注册中心ADMINS服务
+          uri: lb://ADMIN-ADMINS  #转发到注册中心ADMINS服务
           predicates:
             - Path=/admins/**
           filters:
@@ -19,7 +19,7 @@ spring:
 
           #分类网关
         - id: category-router
-          uri: lb://CATEGORY  #转发到注册中心ADMINS服务
+          uri: lb://ADMIN-CATEGORY  #转发到注册中心ADMINS服务
           predicates:
             - Path=/category/**
           filters:
@@ -28,7 +28,7 @@ spring:
 
           #用户网关
         - id: users-router
-          uri: lb://USERS  #转发到注册中心ADMINS服务
+          uri: lb://ADMIN-USERS  #转发到注册中心ADMINS服务
           predicates:
             - Path=/users/**
           filters:
@@ -36,7 +36,7 @@ spring:
 
           #视频网关
         - id: videos-router
-          uri: lb://VIDEOS  #转发到注册中心ADMINS服务
+          uri: lb://ADMIN-VIDEOS  #转发到注册中心ADMINS服务
           predicates:
             - Path=/videos/**
           filters:

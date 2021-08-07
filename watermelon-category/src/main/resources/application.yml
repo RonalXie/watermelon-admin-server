@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: CATEGORY
+    name: ADMIN-CATEGORY
   cloud:
     nacos:
       server-addr: 106.15.43.178:8848

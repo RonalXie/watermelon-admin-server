@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: ADMINS
+    name: ADMIN-ADMINS
   cloud:
     nacos:
       server-addr: 106.15.43.178:8848
