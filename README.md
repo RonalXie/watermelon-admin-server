@@ -4,6 +4,8 @@
 
 - SpringBoot
 - SpringCloud&Alibaba
+- SpringMVC
+  Mybatis
 - MySQL
 - Redis
 - RabbitMQ
